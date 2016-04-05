@@ -83,15 +83,37 @@ Vector3 Raytrace::computeLocalColor(const Intersection &intersection) {
   Vector3 L;
   Vector3 N;
   Vector3 V;
+
+  //N = normale au point d'intersection (normalisé, voir cours chap6 p13)
   N=intersection.normal();
+  N.normalize();
+
+  //P = coordonnées du point d'intersection
   P=intersection.point();
+
   // V= ?, L=?
+
+  // m = propriété du matériau de l'objet (couleurs refletées etc.)
   Material m=intersection.node()->primitive()->material();
 
+  //result contient juste la couleur du matériau, sans lumière s'y additionnant
+  Vector3 result=m.ambient().xyz();
 
-  Vector3 result=Vector3(1,1,1); // =m.ambient();
+  //Pour toutes les sources de lumières
+  for(int i = 0; i < _scene->nbLight(); i++) {
+      //L = vecteur d'éclairement / angle du rayon => Vecteur entre la position de la lumière et le "point d'impact"
+      L = Vector3(P, _scene->lightPosition(i));
+      L.normalize();
 
+      //E2Q2
+      //on calcule l'intensité du rayon diffusé, l'angle du rayon par rapport à la normale est un bon indicateur de l'intensité (chap6 p13)
+      double LdotN = L.dot(N);
 
+      //si l'angle est inférieur à 0, on est de l'autre coté, si = 0 on est tangeant => on éclaire pas
+      if(LdotN > 0.)
+          // on multiplie la couleur du matériau de base par l'intensité du rayon, puis on l'additionne aux rayons déjà reçus pour simuler l'éclairement
+          result = result + m.diffuse() * LdotN;
+  }
 
   return result;
 }
