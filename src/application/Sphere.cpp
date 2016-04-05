@@ -21,7 +21,7 @@ Sphere::Sphere() : Primitive() {}
 */
 void Sphere::intersection(const Ray &ray,IntersectionArray *result) {
 
-  /**
+    /**
    * A COMPLETER : il faut résoudre l'équation en lambda (cf cours), puis créer dans le résultat les intersections correspondantes aux lambda  :
    * !! pour ajouter une intersection à la fin de la liste result, utilisez uniquement : result->addIntersection(lambda)
    * ray est déjà dans le repère local de la sphere unitaire centrée à l'origine :
@@ -33,8 +33,19 @@ void Sphere::intersection(const Ray &ray,IntersectionArray *result) {
    *  rappel : a.dot(b) donne le produit scalaire de a par b
    */
 
-  result->clear(); // initialisation : liste d'intersection vide
+    result->clear(); // initialisation : liste d'intersection vide
 
+    //voir Readme.txt pour la résolution
+    Vector3 A = ray.point();
+    Vector3 u = ray.direction();
+    double delta = 4 * pow((A.dot(u)), 2.) - 4 * u.dot(u) * (A.dot(A) - 1);
+
+    if(delta > 0.) {
+        double r1 = ( -2 * (A.dot(u)) - sqrt(delta) ) / (2 * u.dot(u));
+        double r2 = ( 2 * (A.dot(u)) + sqrt(delta) ) / (2 * u.dot(u));
+        result->addIntersection(min(r1, r2));
+        result->addIntersection(max(r1,r2));
+    }
 
 
 }
@@ -46,13 +57,13 @@ void Sphere::intersection(const Ray &ray,IntersectionArray *result) {
 /** ****************************************************** **/
 
 Vector3 Sphere::computeNormal(const Vector3 &p) {
-  return p;
+    return p;
 }
 
 
 void Sphere::drawGL() {
-  p3d::shaderLightPhong();
-  materialGL();
-  p3d::drawSphere();
+    p3d::shaderLightPhong();
+    materialGL();
+    p3d::drawSphere();
 }
 
