@@ -97,7 +97,7 @@ Vector3 Raytrace::computeLocalColor(const Intersection &intersection) {
   Material m=intersection.node()->primitive()->material();
 
   //result contient juste la couleur du matériau, sans lumière s'y additionnant
-  Vector3 result=m.ambient().xyz();
+  Vector3 result = m.ambient().xyz();
 
   //Pour toutes les sources de lumières
   for(int i = 0; i < _scene->nbLight(); i++) {
