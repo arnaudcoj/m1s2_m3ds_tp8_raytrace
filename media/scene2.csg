@@ -21,7 +21,7 @@
     <diffuse red="0.0" green="0.1" blue="0.6" />
     <scale x="1.2" y="1.2" z="1.2" />
     <specular red="0.0" green="0.8" blue="0.0" shininess="50" />
-    <reflection coefficient="0.0" />
+    <reflection coefficient="0.4" />
     <refraction coefficient="0.4" index="1.1" />
   </primitive>
 </node>
