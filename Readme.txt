@@ -1,6 +1,8 @@
 Camus Tristan
 Cojez Arnaud
 
+Nous avons répondu à toutes les questions du TP.
+
 E2.Q1 :
 On a :
    A + λu
@@ -33,10 +35,7 @@ Nous pouvons résoudre ce polynôme :
 
 En fonction du signe de Δ, le nombre et la valeur des solutions seront différent. (résolution de polynôme de second degré)
 
+E4.Q6.
+Le scène 3 contient l'union de la scene 2 et 1, avec une intersection de deux sphères.
 
-NOTE : Dans scene2.csg, la sphere était déjà réflechissante avant que l'on arrive à la question 4.
-
-Doit contenir :
-- ce que vous n'avez pas fait (et pourquoi). Précisez explicitement "tout à été fait et fonctionne parfaitement" si c'est le cas.
-- difficultés rencontrées.
-- commentaires éventuels sur le TP (points à éclaircir, longueur du sujet, etc). 
+NOTE : Dans scene2.csg, la sphere était déjà réflechissante avant que l'on arrive à la question 4, ce qui peut porter à confusion.
