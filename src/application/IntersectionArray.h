@@ -9,7 +9,7 @@
 
 class IntersectionArray: public std::vector<Intersection *>  {
   public:
-    void fusion(IntersectionArray &left,IntersectionArray &right,CsgTree::ENode op);
+    void fusion(IntersectionArray &right, IntersectionArray &left, CsgTree::ENode op);
 
     IntersectionArray();
     void addIntersection(double lambda);

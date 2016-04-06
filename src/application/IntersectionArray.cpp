@@ -16,14 +16,14 @@ L'opération op peut prendre les valeurs CsgTree::OP_INTERSECTION, CsgTree::OP_U
 */
 void IntersectionArray::fusion(IntersectionArray &gauche,IntersectionArray &droite,CsgTree::ENode op) {
 
-  bool eG,eD,eN,ePN;  // états : true = IN, false = OUT
-  eG=false;  // état courant gauche
-  eD=false;  // état courant droite
-  eN=false;  // état courant de la fusion
-  ePN=false; // nouvel état de la fusion
+    bool eG,eD,eN,ePN;  // états : true = IN, false = OUT
+    eG=false;  // état courant gauche
+    eD=false;  // état courant droite
+    eN=false;  // état courant de la fusion
+    ePN=false; // nouvel état de la fusion
 
-  unsigned int iG=0;
-  unsigned int iD=0;
+    unsigned int iG=0;
+    unsigned int iD=0;
 
     /**
     * il faut ajouter à this (liste d'intersections initialement vide) les intersections résultantes de la fusion (algo vu en cours) :
@@ -37,12 +37,51 @@ void IntersectionArray::fusion(IntersectionArray &gauche,IntersectionArray &droi
     *
     * Attention !!!!!! Faire un delete sur une intersection qui n'est pas retenue dans le résultat : par exemple delete gauche[iG]
     */
-  this->clear(); // initialisation de la fusion
-  // while(....)
+    this->clear(); // initialisation de la fusion
 
+    while(iG < gauche.size() || iD < droite.size()) {
+        Intersection* inter;
 
+        if(iD >= droite.size() && iG < gauche.size()) {
+            inter = gauche[iG];
+            eG = !eG;
+            iG++;
+        } else if(iG >= gauche.size() && iD < droite.size()) {
+            inter = droite[iD];
+            eD = !eD;
+            iD++;
+        } else if(gauche[iG]->lambda() < droite[iD]->lambda()) {
+            inter = gauche[iG];
+            eG = !eG;
+            iG++;
+        } else {
+            inter = droite[iD];
+            eD = !eD;
+            iD++;
+        }
 
+        switch(op) {
+        case CsgTree::Node_Intersection:
+            ePN = eG && eD;
+            break;
+        case CsgTree::Node_Union:
+            ePN = eG || eD;
+            break;
+        case CsgTree::Node_Difference:
+            ePN = eG && !eD;
+        default:
+            break;
+        }
 
+        if(ePN) {
+            push_back(inter);
+        } else {
+            delete inter;
+        }
+
+        eN = ePN;
+
+    }
 
 }
 
@@ -54,24 +93,24 @@ void IntersectionArray::fusion(IntersectionArray &gauche,IntersectionArray &droi
 /** *********************************************************************************************** */
 
 void IntersectionArray::addIntersection(double lambda) {
-  this->push_back(new Intersection(lambda));
+    this->push_back(new Intersection(lambda));
 }
 
 void IntersectionArray::deleteAll() {
-  for(IntersectionArray::iterator i=begin(); i!=end(); i++) {
-    if (*i) delete (*i);
-  }
-  clear();
+    for(IntersectionArray::iterator i=begin(); i!=end(); i++) {
+        if (*i) delete (*i);
+    }
+    clear();
 }
 
 
 IntersectionArray::IntersectionArray() {
-  //ctor
-  this->clear();
+    //ctor
+    this->clear();
 }
 
 IntersectionArray::~IntersectionArray() {
-  //dtor
+    //dtor
 }
 
 

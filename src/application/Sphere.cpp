@@ -42,9 +42,14 @@ void Sphere::intersection(const Ray &ray,IntersectionArray *result) {
 
     if(delta > 0.) {
         double r1 = ( -2 * (A.dot(u)) - sqrt(delta) ) / (2 * u.dot(u));
-        double r2 = ( 2 * (A.dot(u)) + sqrt(delta) ) / (2 * u.dot(u));
-        result->addIntersection(min(r1, r2));
-        result->addIntersection(max(r1,r2));
+        double r2 = ( -2 * (A.dot(u)) + sqrt(delta) ) / (2 * u.dot(u));
+        if(r1 < r2) {
+            result->addIntersection(min(r1, r2));
+            result->addIntersection(max(r1,r2));
+        } else {
+            result->addIntersection(min(r1, r2));
+            result->addIntersection(max(r1,r2));
+        }
     }
 
 
