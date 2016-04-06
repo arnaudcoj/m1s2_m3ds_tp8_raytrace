@@ -45,8 +45,10 @@ Vector3 Raytrace::computeRayColor(const Ray &ray, int level, double contribution
         if (inter!=NULL) { // existe-t-il une intersection avec la scène ?
             color=computeLocalColor(*inter); // calcul de la couleur par Phong
 
-
-
+            //E4Q3 : on vérifie si l'objet est réfléchissant
+            if(inter->material().reflectionCoefficient() > 0.)
+                //on renvoie un rayon réfléchi et on récupère la couleur renvoyée
+                color += computeRayColor(inter->computeReflectRay(),level -1, 1.);
 
 
             // libération mémoire de inter

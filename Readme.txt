@@ -34,6 +34,8 @@ Nous pouvons résoudre ce polynôme :
 En fonction du signe de Δ, le nombre et la valeur des solutions seront différent. (résolution de polynôme de second degré)
 
 
+NOTE : Dans scene2.csg, la sphere était déjà réflechissante avant que l'on arrive à la question 4.
+
 Doit contenir :
 - ce que vous n'avez pas fait (et pourquoi). Précisez explicitement "tout à été fait et fonctionne parfaitement" si c'est le cas.
 - difficultés rencontrées.
