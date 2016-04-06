@@ -97,7 +97,9 @@ Vector3 Raytrace::computeLocalColor(const Intersection &intersection) {
     //P = coordonnées du point d'intersection
     P=intersection.point();
 
-    // V= ?, L=?
+    //V = vecteur point-oeil
+    V = Vector3(P, _scene->camera().position());
+    V.normalize();
 
     // m = propriété du matériau de l'objet (couleurs refletées etc.)
     Material m=intersection.node()->primitive()->material();
@@ -111,23 +113,34 @@ Vector3 Raytrace::computeLocalColor(const Intersection &intersection) {
         L = Vector3(P, _scene->lightPosition(i));
         L.normalize();
 
-        //E2Q2
-        //on calcule l'intensité du rayon diffusé, l'angle du rayon par rapport à la normale est un bon indicateur de l'intensité (chap6 p13)
-        double LdotN = L.dot(N);
-
         //E4Q1
         //on créé un rayon de direction L qui frappe P
         Ray shadow(P, L);
         //J'imagine qu'on cherche une intersection entre P + 0.1 et la source ?
         Intersection *nearestIntersection=_scene->intersection(shadow, 0.1);
 
-        //E2Q2 : si l'angle est inférieur à 0, on est de l'autre coté, si = 0 on est tangeant => on éclaire pas
-        if(LdotN > 0.)
-            //E4Q1 : s'il n'existe pas d'intersection entre P et la source, on éclaire
-            if(nearestIntersection == nullptr)
+        //E4Q1 : s'il n'existe pas d'intersection entre P et la source, on éclaire
+        if(nearestIntersection == nullptr) {
+
+            //E2Q2 : on calcule l'intensité du rayon diffusé, l'angle du rayon par rapport à la normale est un bon indicateur de l'intensité (chap6 p13)
+            double LdotN = L.dot(N);
+
+            //E4Q5 : on calcule le rayon R miroir de L (pour la spécularité) (chap6 p21)
+            Vector3 R = 2 * (L.dot(N)) * N - L ;
+            //E4Q5 : on calcule l'intensité du rayon spéculaire (V.R) pour la même raison (chap6 p22)
+            //E4Q5 : on prend aussi en compte la brillance du matériau (chap6 p23)
+            double coeff = pow(V.dot(R), m.shininess());
+
+            //E2Q2 : si l'angle est inférieur à 0, on est de l'autre coté, si = 0 on est tangeant => on éclaire pas
+            if(LdotN > 0.)
                 //E2Q2 : on multiplie la couleur du matériau de base par l'intensité du rayon, puis on l'additionne aux rayons déjà reçus pour simuler l'éclairement
                 result = result + m.diffuse() * LdotN;
 
+            //E4Q5 : idem pour la spécularité
+            if(coeff > 0.) {
+                result = result + m.specular() * coeff;
+            }
+        }
 
         //E4Q1
         delete nearestIntersection;
